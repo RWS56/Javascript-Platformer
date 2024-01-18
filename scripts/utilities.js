@@ -9,7 +9,7 @@ function loadImage(path){
 function loadImages(path, imageAmount){ //checka med marre lomme för bättre sätt
     let images = [];
     for(let i = 0; i < imageAmount; i++){
-        images.push(loadImage(`${path}/${i}`));
+        images.push(loadImage(`${path}/${i}.png`));
     }
     return images;
 }
