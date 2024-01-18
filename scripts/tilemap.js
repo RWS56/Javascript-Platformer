@@ -1,5 +1,5 @@
 const neighborOffset = [[-1, 0], [-1, -1], [0, -1], [1, -1], [1, 0], [0, 0], [-1, 1], [0, 1], [1, 1]];
-const physicsTiles = ["test"];
+const physicsTiles = ["grass"];
 
 class Tilemap{
     constructor(game, ctx, canvas, tileSize = 16){
@@ -8,6 +8,7 @@ class Tilemap{
         this.canvas = canvas
         this.tileSize = tileSize;
         this.tilemap = {};
+        this.offgridTiles = {};
     }
 
     tilesAround(position, isGrid=false){
@@ -27,7 +28,15 @@ class Tilemap{
         return tiles;
     }
 
-    getPhysicsRectAround(position){
+    save(){
+        let data = JSON.stringify({"tilemap": this.tilemap, "tileSize": this.tileSize, "offgridTiles": this.offgridTiles})
+    }
+
+    load(){
+        
+    }
+
+    getPhysicsRectAround(position){ //använd for(let tile in x) etc ungefär som pythons for tile in tiles etc
         let rects = [];
         this.tilesAround(position).forEach(tile => {
             if(tile["type"] in physicsTiles){
@@ -41,7 +50,7 @@ class Tilemap{
     draw(offset = [0, 0]){
         for(let x = Math.floor(offset[0] / this.tileSize) - 1; x < Math.floor((offset[0] + window.innerWidth) / this.tileSize) + 1; x++){
             for(let y = Math.floor(offset[1] / this.tileSize); y < Math.floor((offset[1] + window.innerHeight) / this.tileSize) + 1; y++){
-                let checkLocation = x.toString() + ";" + y.toString();
+                let checkLocation = `${x};${y}`;
                 if(checkLocation in this.tilemap){
                     let tile = this.tilemap[checkLocation];
                     this.ctx.drawImage(this.game.assets[tile["type"]][tile["variant"]], tile["pos"][0] * this.tileSize - offset[0], tile["pos"][1] * this.tileSize - offset[1], this.tileSize, this.tileSize);

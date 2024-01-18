@@ -1,4 +1,4 @@
-const basePath = "images/";
+const basePath = "data/images/";
 
 function loadImage(path){
     let image = new Image();
