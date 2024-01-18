@@ -11,6 +11,7 @@ class Game{
         this.ctx.scale(this.renderScale, this.renderScale)
         this.movement = [false, false, false, false];
         this.scrollOffset = [0, 0];
+        this.mouseDown = false;
 
         this.assets = { 
             "grass" : loadImages("tiles/grass", 9),
@@ -40,7 +41,7 @@ class Game{
         this.ctx.imageSmoothingEnabled = false; //point clamp, crisp image, good 4 pixelart
 
         this.scrollOffset[0] += (this.movement[1] - this.movement[0]) * 2
-        this.scrollOffset[1] += (this.movement[2] - this.movement[3]) * 2
+        this.scrollOffset[1] += (this.movement[3] - this.movement[2]) * 2
         let renderScroll = [Math.round(this.scrollOffset[0]), Math.round(this.scrollOffset[1])]
 
         this.tilemap.draw(renderScroll);
@@ -50,6 +51,10 @@ class Game{
         this.ctx.globalAlpha = 0.4;
         this.ctx.drawImage(selectedTileImage, mouseGridPos[0] * this.tilemap.tileSize - this.scrollOffset[0], mouseGridPos[1] * this.tilemap.tileSize - this.scrollOffset[1], this.tilemap.tileSize, this.tilemap.tileSize);
         this.ctx.globalAlpha = 1;
+
+        if(this.mouseDown){
+            this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`] = {"type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": mouseGridPos};
+        }
 
         this.movement[0] = false;
         this.movement[1] = false;
@@ -85,6 +90,14 @@ document.addEventListener('keyup', function(event) {
 document.addEventListener('mousemove', function(event) {
     mousePos[0] = Math.floor(event.clientX / game.renderScale);
     mousePos[1] = Math.floor(event.clientY / game.renderScale);
+});
+
+document.addEventListener('mousedown', function(event) {
+    game.mouseDown = true;
+});
+
+document.addEventListener('mouseup', function(event) {
+    game.mouseDown = false;
 });
 
 window.addEventListener('resize', function(event) {
