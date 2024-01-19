@@ -74,8 +74,32 @@ class Tilemap{
         document.body.removeChild(element);
     }
 
-    load(){
-        let data;
+    load(fileName = "map.json"){
+        /*let input = document.createElement('input');
+        input.type = 'file';
+
+        input.onchange = e => { 
+            let file = e.target.files[0]; 
+
+            let reader = new FileReader();
+            reader.readAsText(file,'UTF-8');
+
+            reader.onload = readerEvent => {
+                let content = readerEvent.target.result; // this is the content of the file
+                let data = JSON.parse(content);
+
+                // Now you can use the data object to load your map
+                // For example:
+                this.tilemap = data.tilemap;
+                this.tileSize = data.tileSize;
+                this.offgridTiles = data.offgridTiles;
+            }
+        }
+
+        input.click();*/
+        this.tilemap = mapData.tilemap;
+        this.tileSize = mapData.tileSize;
+        this.offgridTiles = mapData.offgridTiles;
     }
 
     getPhysicsRectAround(position){ //använd for(let tile in x) etc ungefär som pythons for tile in tiles etc

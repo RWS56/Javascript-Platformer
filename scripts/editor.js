@@ -18,6 +18,8 @@ class Game{
         this.keys = {};
         this.mousePos = [0, 0]
 
+        this.isSaving = false;
+
         this.assets = { 
             "grass" : loadImages("tiles/grass", 9),
         };
@@ -27,6 +29,7 @@ class Game{
         this.tileVariant = 0;
 
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
+        this.tilemap.load();
     }
 
     run(){
@@ -36,6 +39,10 @@ class Game{
         
         document.addEventListener('keyup', (event) => {
             this.keys[event.key] = false;
+
+            if(event.key === "o"){
+                this.isSaving = false;
+            }
         });
         
         document.addEventListener('mousemove', (event) => {
@@ -111,7 +118,8 @@ class Game{
         if(this.keys["t"]){
             this.tilemap.autoTile();
         }
-        if(this.keys["o"]){
+        if(this.keys["o"] && !this.isSaving){
+            this.isSaving = true;
             this.tilemap.save();    
         }
     }
