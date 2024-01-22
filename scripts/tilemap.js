@@ -61,21 +61,57 @@ class Tilemap{
         }
     }
 
-    save(){ //dåligt sätt
-        let data = JSON.stringify({"tilemap": this.tilemap, "tileSize": this.tileSize, "offgridTiles": this.offgridTiles});
-        let element = document.createElement("a");
-        element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
-        element.setAttribute("download", "map.json");
-
-        element.style.display = "none";
-        document.body.appendChild(element);
-        element.click();
-
-        document.body.removeChild(element);
+    save(){ 
+        localStorage.setItem("map1", JSON.stringify({"tilemap": this.tilemap, "offgrid": this.offgridTiles, "tileSize": this.tileSize}));
     }
 
     load(fileName = "map.json"){
-        /*let input = document.createElement('input');
+        try
+        {
+            let data = JSON.parse(localStorage.getItem("map1"));
+            this.tilemap = data["tilemap"];
+            this.offgridTiles = data["offgrid"];
+            this.tileSize = data["tileSize"];
+        }
+        catch
+        {
+            console.error("Couldn't Locate Tilemap")
+        }
+    }
+
+    getPhysicsRectAround(position){ //använd for(let tile in x) etc ungefär som pythons for tile in tiles etc
+        let rects = [];
+        for(let tile in this.tilesAround(position)){
+            if(tile["type"] in physicsTiles){
+                rects.push(new Rect(tile["pos"][0] * this.tileSize, tile["pos"][1] * this.tileSize, this.tileSize, this.tileSize));
+            }
+        }
+
+        /*this.tilesAround(position).forEach(tile => {
+            if(tile["type"] in physicsTiles){
+                rects.push(new Rect(tile["pos"][0] * this.tileSize, tile["pos"][1] * this.tileSize, this.tileSize, this.tileSize));
+            }
+        });*/
+
+        return rects;
+    }
+    
+    draw(offset = [0, 0]){
+        for(let x = Math.floor(offset[0] / this.tileSize) - 1; x < Math.floor((offset[0] + window.innerWidth / this.renderScale) / this.tileSize) + 1; x++){
+            for(let y = Math.floor(offset[1] / this.tileSize) - 1; y < Math.floor((offset[1] + window.innerHeight / this.renderScale) / this.tileSize) + 1; y++){
+                let checkLocation = `${x};${y}`;
+                if(checkLocation in this.tilemap){
+                    let tile = this.tilemap[checkLocation];
+                    this.ctx.drawImage(this.game.assets[tile["type"]][tile["variant"]], tile["pos"][0] * this.tileSize - offset[0], tile["pos"][1] * this.tileSize - offset[1], this.tileSize, this.tileSize);
+                }
+            }
+        }
+    }
+}
+
+//module.exports = { Tilemap, neighborOffset }; Node
+//OLDCODE
+/*let input = document.createElement('input');
         input.type = 'file';
 
         input.onchange = e => { 
@@ -97,33 +133,18 @@ class Tilemap{
         }
 
         input.click();*/
-        this.tilemap = mapData.tilemap;
+        /*this.tilemap = mapData.tilemap;
         this.tileSize = mapData.tileSize;
-        this.offgridTiles = mapData.offgridTiles;
-    }
+        this.offgridTiles = mapData.offgridTiles;*/
 
-    getPhysicsRectAround(position){ //använd for(let tile in x) etc ungefär som pythons for tile in tiles etc
-        let rects = [];
-        this.tilesAround(position).forEach(tile => {
-            if(tile["type"] in physicsTiles){
-                rects.push(new Rect(tile["pos"][0] * this.tileSize, tile["pos"][1] * this.tileSize, this.tileSize, this.tileSize));
-            }
-        });
+        //dåligt sätt
+        /*let data = JSON.stringify({"tilemap": this.tilemap, "tileSize": this.tileSize, "offgridTiles": this.offgridTiles});
+        let element = document.createElement("a");
+        element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
+        element.setAttribute("download", "map.json");
 
-        return rects;
-    }
-    
-    draw(offset = [0, 0]){
-        for(let x = Math.floor(offset[0] / this.tileSize) - 1; x < Math.floor((offset[0] + window.innerWidth / this.renderScale) / this.tileSize) + 1; x++){
-            for(let y = Math.floor(offset[1] / this.tileSize) - 1; y < Math.floor((offset[1] + window.innerHeight / this.renderScale) / this.tileSize) + 1; y++){
-                let checkLocation = `${x};${y}`;
-                if(checkLocation in this.tilemap){
-                    let tile = this.tilemap[checkLocation];
-                    this.ctx.drawImage(this.game.assets[tile["type"]][tile["variant"]], tile["pos"][0] * this.tileSize - offset[0], tile["pos"][1] * this.tileSize - offset[1], this.tileSize, this.tileSize);
-                }
-            }
-        }
-    }
-}
+        element.style.display = "none";
+        document.body.appendChild(element);
+        element.click();
 
-//module.exports = { Tilemap, neighborOffset }; Node
+        document.body.removeChild(element);*/
