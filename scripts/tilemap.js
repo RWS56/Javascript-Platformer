@@ -65,10 +65,10 @@ class Tilemap{
         localStorage.setItem("map1", JSON.stringify({"tilemap": this.tilemap, "offgrid": this.offgridTiles, "tileSize": this.tileSize}));
     }
 
-    load(fileName = "map.json"){
+    load(fileName = "map1"){
         try
         {
-            let data = JSON.parse(localStorage.getItem("map1"));
+            let data = JSON.parse(localStorage.getItem(fileName));
             this.tilemap = data["tilemap"];
             this.offgridTiles = data["offgrid"];
             this.tileSize = data["tileSize"];

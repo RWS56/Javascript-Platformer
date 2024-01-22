@@ -7,7 +7,7 @@ class Game{
         
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.renderScale = 4;
+        this.renderScale = 3;
         this.ctx.scale(this.renderScale, this.renderScale)
 
         this.movement = [false, false, false, false];
@@ -33,6 +33,12 @@ class Game{
     }
 
     run(){
+        this.addListeners();
+
+        this.update();
+    }
+
+    addListeners(){
         document.addEventListener('keydown', (event) => {
             this.keys[event.key] = true;
         });
@@ -69,8 +75,10 @@ class Game{
             this.canvas.height = window.innerHeight;
             this.ctx.scale(this.renderScale, this.renderScale);
         });
-        
-        this.update();
+
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        }, false);
     }
 
     //main game loop
@@ -97,6 +105,10 @@ class Game{
 
         if(this.mouseDown){
             this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`] = {"type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": mouseGridPos};
+        }
+        if(this.rightClick)
+        {
+            delete this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`];
         }
 
         this.movement[0] = false;
