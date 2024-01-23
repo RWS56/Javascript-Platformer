@@ -1,6 +1,6 @@
 //const { Tilemap, neighborOffset } = require('./scripts/tilemap'); 4 node
 
-class Game{
+class Editor{
     constructor(canvas){
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
@@ -22,6 +22,7 @@ class Game{
 
         this.assets = { 
             "grass" : loadImages("tiles/grass", 9),
+            //"backgroundtest" : loadImage("backgroundtest.png")
         };
 
         this.tileArray = Object.keys(this.assets);  
@@ -137,5 +138,5 @@ class Game{
     }
 }
 
-let game = new Game(document.getElementById("canvas"));
-game.run();
+let editor = new Editor(document.getElementById("canvas"));
+editor.run();

@@ -15,7 +15,31 @@ class Rect{
         );
     }
 
-    getArea(){
-        return (this.width-this.x) * (this.height-this.y);
+    get area(){
+        return (this.width) * (this.height);
+    }
+
+    get right(){
+        return this.x + this.width;
+    }
+    
+    get left(){
+        return this.x;
+    }
+
+    get top(){
+        return this.y;
+    }
+
+    get bottom(){
+        return this.y + this.height;
+    }
+
+    get centerX(){
+        return  (x + this.width) / 2;
+    }
+
+    get centerY(){
+        return (y + this.height) / 2;
     }
 }

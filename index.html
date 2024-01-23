@@ -2,8 +2,20 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Game</title>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Untitled Game</title>
+		<style>
+			html {
+				overflow: hidden;
+			}
+
+			body {
+				margin: 0;
+				padding: 0;
+			}
+		</style>
 	</head>
 	<body>
 		<canvas id="canvas" width="500" height="500"> ERROR </canvas>
@@ -11,5 +23,6 @@
 	<script src="./scripts/utilities.js"></script>
 	<script src="./scripts/tilemap.js"></script>
 	<script src="./scripts/rectangles.js"></script>
+	<script src="./scripts/physicsEntity.js"></script>
 	<script src="./game.js"></script>
 </html>
