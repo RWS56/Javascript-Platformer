@@ -7,8 +7,9 @@ class Game{
         
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.renderScale = 4;
+        this.renderScale = 3;
         this.ctx.scale(this.renderScale, this.renderScale)
+        
         this.isRunning = false;
 
         this.movement = [false, false];
@@ -18,13 +19,14 @@ class Game{
 
         this.assets = { 
             "grass" : loadImages("tiles/grass", 9),
-            "backgroundtest" : loadImage("backgroundtest.png")
+            "backgroundtest" : loadImage("backgroundtest.png"),
+            "playerDuck" : loadImage("duck.png"),
         };
 
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
         this.tilemap.load();
 
-        this.player = new Player(this, [160, 0], [16, 16]);
+        this.player = new Player(this, [0, 0], [16, 16]);
     }
 
     run(){
@@ -81,7 +83,7 @@ class Game{
         this.tilemap.draw(renderScroll);
 
         this.player.update(this.tilemap, [this.movement[1] - this.movement[0], 0]);
-        this.player.draw(this.assets.grass[4], this.ctx, renderScroll);
+        this.player.draw(this.assets.playerDuck, this.ctx, renderScroll);
 
         this.movement[0] = false;
         this.movement[1] = false;

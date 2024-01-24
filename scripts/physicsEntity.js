@@ -51,7 +51,12 @@ class PhysicsEntity{
             }
         }
 
-        this.flip = movement[0] < 0; // må skapa lite problem, kolla på senare om fel upptäcks
+        if(assignedMovement[0] > 0){
+            this.flip = false;
+        }
+        if(assignedMovement[0] < 0){
+            this.flip = true;
+        }
 
         this.velocity[1] = Math.min(5, this.velocity[1] + 0.1); // Bad Gravity, FIXFIXFIXFIX
         if(this.collision["down"] || this.collision["up"]){
@@ -60,7 +65,16 @@ class PhysicsEntity{
     }
 
     draw(img, ctx, offset = [0, 0]){
-        ctx.drawImage(img, this.position[0] - offset[0], this.position[1] - offset[1]);
+        if(this.flip){
+            ctx.save();
+            ctx.scale(-1, 1);
+            ctx.drawImage(img, -(this.position[0] - offset[0] + img.width), this.position[1] - offset[1]);
+            ctx.restore();
+        }
+        else{
+            ctx.drawImage(img, this.position[0] - offset[0], this.position[1] - offset[1]);
+        }
+        
     }
 }
 
