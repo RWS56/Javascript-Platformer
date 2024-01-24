@@ -1,5 +1,5 @@
 const neighborOffset = [[-1, 0], [-1, -1], [0, -1], [1, -1], [1, 0], [0, 0], [-1, 1], [0, 1], [1, 1]];
-const physicsTiles = ["grass"];
+const physicsTiles = ["grass", "hej"];
 const autoTiledTiles = ["grass"];
 
 const autoTileMapRuleset = {
@@ -32,13 +32,12 @@ class Tilemap{
 
         tileLocation = !isGrid ? [Math.floor(position[0] / this.tileSize), Math.floor(position[1] / this.tileSize)] : position;
 
-        neighborOffset.forEach(element => {
-            let checkLocation = `${tileLocation[0] + element[0]};${tileLocation[1] + element[1]}`;
-
+        for(let neighbor of neighborOffset){ //Upprepa inte misstageet med let istället för of i en 2d array
+            let checkLocation = `${tileLocation[0] + neighbor[0]};${tileLocation[1] + neighbor[1]}`;
             if(checkLocation in this.tilemap){
                 tiles.push(this.tilemap[checkLocation]);
             }
-        });
+        }
         return tiles;
     }
 
@@ -81,18 +80,11 @@ class Tilemap{
 
     getPhysicsRectAround(position){ //använd for(let tile in x) etc ungefär som pythons for tile in tiles etc
         let rects = [];
-        for(let tile in this.tilesAround(position)){
-            if(tile["type"] in physicsTiles){
+        for(let tile of this.tilesAround(position)){
+            if(physicsTiles.includes(tile["type"])){
                 rects.push(new Rect(tile["pos"][0] * this.tileSize, tile["pos"][1] * this.tileSize, this.tileSize, this.tileSize));
             }
         }
-
-        /*this.tilesAround(position).forEach(tile => {
-            if(tile["type"] in physicsTiles){
-                rects.push(new Rect(tile["pos"][0] * this.tileSize, tile["pos"][1] * this.tileSize, this.tileSize, this.tileSize));
-            }
-        });*/
-
         return rects;
     }
     

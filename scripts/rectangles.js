@@ -36,10 +36,10 @@ class Rect{
     }
 
     get centerX(){
-        return  (x + this.width) / 2;
+        return  this.x + this.width / 2;
     }
 
     get centerY(){
-        return (y + this.height) / 2;
+        return this.y + this.height / 2;
     }
 }

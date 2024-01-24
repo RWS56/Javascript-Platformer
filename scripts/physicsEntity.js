@@ -18,13 +18,11 @@ class PhysicsEntity{
 
     update(tilemap, movement = [0, 0]){
         this.collision = {"up": false, "down": false, "left": false, "right": false};
-
         //Försöker applicera detta om ingen kollision upptäcks
-        let assignedMovement = [movement[0] + this.velocity[0], movement[1], this.velocity[1]];
+        let assignedMovement = [movement[0] + this.velocity[0], movement[1] + this.velocity[1]];
         this.position[0] += assignedMovement[0];
         let myRect = this.rect();
-        console.log(this.tilemap.getPhysicsRectAround(this.position))
-        for(let rect in this.tilemap.getPhysicsRectAround(this.position)){
+        for(let rect of tilemap.getPhysicsRectAround(this.position)){
             if(myRect.collision(rect)){
                 if(assignedMovement[0] > 0){
                     myRect.x = rect.left - myRect.width;
@@ -38,7 +36,8 @@ class PhysicsEntity{
             }
         }
         this.position[1] += assignedMovement[1];
-        for(let rect in this.tilemap.getPhysicsRectAround(this.position)){
+        myRect = this.rect();
+        for(let rect of tilemap.getPhysicsRectAround(this.position)){
             if(myRect.collision(rect)){
                 if(assignedMovement[1] > 0){
                     myRect.y = rect.top - myRect.height;

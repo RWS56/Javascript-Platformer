@@ -7,7 +7,7 @@ class Game{
         
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.renderScale = 3;
+        this.renderScale = 4;
         this.ctx.scale(this.renderScale, this.renderScale)
         this.isRunning = false;
 
@@ -24,7 +24,7 @@ class Game{
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
         this.tilemap.load();
 
-        this.player = new Player(this, [0, 0], 16);
+        this.player = new Player(this, [160, 0], [16, 16]);
     }
 
     run(){
@@ -71,17 +71,17 @@ class Game{
         this.ctx.beginPath();
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.imageSmoothingEnabled = false; //point clamp, crisp image, good 4 pixelart
+        this.ctx.imageSmoothingEnabled = false; //point clamp, crisp image, good 4 pixelart     
 
-        this.scrollOffset[0] += (this.movement[1] - this.movement[0]) * 2
+        this.scrollOffset[0] += (this.player.rect().centerX - this.canvas.width / this.renderScale / 2 - this.scrollOffset[0]) / 30; //RÖR INTE MER, FUNAKR NU
+        this.scrollOffset[1] += (this.player.rect().centerY - this.canvas.height / this.renderScale / 2 - this.scrollOffset[1]) / 30;
         let renderScroll = [Math.round(this.scrollOffset[0]), Math.round(this.scrollOffset[1])]
 
         this.ctx.drawImage(this.assets["backgroundtest"], 0, 0, 640, 420);
         this.tilemap.draw(renderScroll);
 
-        console.log(this.tilemap.tilesAround())
-        //this.player.update(this.tilemap, [this.movement[1] - this.movement[0], 0]);
-        //this.player.draw(this.assets.grass[1], this.ctx, this.renderScroll);
+        this.player.update(this.tilemap, [this.movement[1] - this.movement[0], 0]);
+        this.player.draw(this.assets.grass[4], this.ctx, renderScroll);
 
         this.movement[0] = false;
         this.movement[1] = false;
@@ -90,10 +90,13 @@ class Game{
             this.movement[0] = true;
         }
         if(this.keys["d"]){
-            this.movement[1] = true
+            this.movement[1] = true;
+        }
+        if(this.keys["w"]){
+            this.player.jump();
         }
     }
 }
 
-let editor = new Game(document.getElementById("canvas"));
-editor.run();
+let game = new Game(document.getElementById("canvas"));
+game.run();
