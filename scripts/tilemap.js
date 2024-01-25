@@ -94,7 +94,7 @@ class Tilemap{
                 let checkLocation = `${x};${y}`;
                 if(checkLocation in this.tilemap){
                     let tile = this.tilemap[checkLocation];
-                    this.ctx.drawImage(this.game.assets[tile["type"]][tile["variant"]], tile["pos"][0] * this.tileSize - offset[0], tile["pos"][1] * this.tileSize - offset[1], this.tileSize, this.tileSize);
+                    this.ctx.drawImage(this.game.assets[tile["type"]][tile["variant"]], tile["pos"][0] * this.tileSize - offset[0], tile["pos"][1] * this.tileSize - offset[1], this.game.assets[tile["type"]][tile["variant"]].width, this.game.assets[tile["type"]][tile["variant"]].height);
                 }
             }
         }

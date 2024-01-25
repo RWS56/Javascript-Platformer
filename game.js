@@ -83,7 +83,7 @@ class Game{
         this.tilemap.draw(renderScroll);
 
         this.player.update(this.tilemap, [this.movement[1] - this.movement[0], 0]);
-        this.player.draw(this.assets.playerDuck, this.ctx, renderScroll);
+        this.player.draw(this.assets["playerDuck"], this.ctx, renderScroll);
 
         this.movement[0] = false;
         this.movement[1] = false;
@@ -94,7 +94,7 @@ class Game{
         if(this.keys["d"]){
             this.movement[1] = true;
         }
-        if(this.keys["w"]){
+        if(this.keys[" "]){
             this.player.jump();
         }
     }

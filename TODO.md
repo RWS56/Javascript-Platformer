@@ -1,3 +1,3 @@
 # TODO
 
-FIXA TILEMAP: getPHYSICSRECTAROUND och TILESAROUND
+FIXA TILEMAP: Lägg till stöd för offgridtilemap

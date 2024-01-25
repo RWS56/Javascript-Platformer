@@ -22,7 +22,7 @@ class Editor{
 
         this.assets = { 
             "grass" : loadImages("tiles/grass", 9),
-            //"backgroundtest" : loadImage("backgroundtest.png")
+            "decor" : loadImages("decor", 2),
         };
 
         this.tileArray = Object.keys(this.assets);  
@@ -31,6 +31,9 @@ class Editor{
 
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
         this.tilemap.load();
+
+        //Hackfix remove later on
+        this.frameCounter = 0;
     }
 
     run(){
@@ -101,7 +104,9 @@ class Editor{
         let selectedTileImage = this.assets[this.tileArray[this.tileType]][this.tileVariant];
         let mouseGridPos = [Math.floor((this.mousePos[0] + this.scrollOffset[0]) / this.tilemap.tileSize), Math.floor((this.mousePos[1] + this.scrollOffset[1]) / this.tilemap.tileSize)]
         this.ctx.globalAlpha = 0.45;
-        this.ctx.drawImage(selectedTileImage, mouseGridPos[0] * this.tilemap.tileSize - this.scrollOffset[0], mouseGridPos[1] * this.tilemap.tileSize - this.scrollOffset[1], this.tilemap.tileSize, this.tilemap.tileSize);
+        
+        this.ctx.drawImage(selectedTileImage, mouseGridPos[0] * this.tilemap.tileSize - this.scrollOffset[0], mouseGridPos[1] * this.tilemap.tileSize - this.scrollOffset[1], selectedTileImage.width, selectedTileImage.height);
+        
         this.ctx.globalAlpha = 1;
 
         if(this.mouseDown){
@@ -134,6 +139,22 @@ class Editor{
         if(this.keys["o"] && !this.isSaving){
             this.isSaving = true;
             this.tilemap.save();    
+        }
+        if(this.keys["+"] && this.frameCounter === 0){
+            this.tileVariant = 0;
+            this.tileType = (1 + this.tileType) % this.tileArray.length;
+        }
+        if(this.keys["-"] && this.frameCounter === 0){
+            this.tileVariant = 0;
+            this.tileType = (1 - this.tileType) % this.tileArray.length;
+        }
+        if(this.keys["Shift"] && this.frameCounter === 0){
+            this.tileVariant = (1 + this.tileVariant) % this.assets[this.tileArray[this.tileType]].length;
+        }
+
+        this.frameCounter++;
+        if(this.frameCounter % 20 === 0){
+            this.frameCounter = 0;
         }
     }
 }
