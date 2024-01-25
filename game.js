@@ -20,6 +20,7 @@ class Game{
         this.assets = { 
             "grass" : loadImages("tiles/grass", 9),
             "backgroundtest" : loadImage("backgroundtest.png"),
+            "decor" : loadImages("decor", 2),
             "playerDuck" : loadImage("duck.png"),
         };
 
