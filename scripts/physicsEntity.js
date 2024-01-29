@@ -96,6 +96,13 @@ class Player extends PhysicsEntity{
         }
     }
 
+    // testkod neda ta bort när stökigt
+    draw(img, ctx, offset = [0, 0]){
+        super.draw(img, ctx, offset);
+
+        ctx.drawImage(game.assets["rifle"], this.rect().centerX - offset[0]- 2, this.rect().centerY - 2 - offset[1]) // ascursed
+    }
+    //
     jump(){
         if(this.isGrounded && this.airTime < this.coyoteJumpThreshold){
             this.velocity[1] = -2.5;

@@ -22,14 +22,19 @@ class Game{
             "grass" : loadImages("tiles/grass", 9),
             "backgroundtest" : loadImage("backgroundtest.png"),
             "decor" : loadImages("decor", 2),
-            "player" : loadImage("0.png"),
+            "player" : loadImage("playerTest1.png"),
+            "rifle" : loadImage("rifletest.png")
         };
 
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
         this.tilemap.load();
 
-        this.player = new Player(this, [0, 0], [16, 16]);
-        this.FPS = 60;
+        this.player = new Player(this, [0, 0], [6, 16]);
+
+        this.particleManager = new ParticleManager(this.ctx);
+
+        this.FPS = 1000/60; //antalet ms per frame
+        this.lastTime = Date.now();
     }
 
     run(){
@@ -69,28 +74,36 @@ class Game{
     //main game loop
     //Kom ihåg att dela icke tilemap bilder med renderscale
     update(){
-        setTimeout(() => {
-            if(this.isRunning){
-                requestAnimationFrame(this.update.bind(this));
-            }
-    
+        if(this.isRunning){
+            requestAnimationFrame(this.update.bind(this));
+        }
+
+        let currentTime = Date.now();
+        let elapsed = currentTime - this.lastTime;
+
+        if(elapsed > this.FPS){
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.beginPath();
             this.ctx.imageSmoothingEnabled = false; //point clamp, crisp image, good 4 pixelart     
-    
+
             this.scrollOffset[0] += (this.player.rect().centerX - this.canvas.width / this.renderScale / 2 - this.scrollOffset[0] - this.cameraOffset[0]) / 30; //RÖR INTE MER, FUNAKR NU
             this.scrollOffset[1] += (this.player.rect().centerY - this.canvas.height / this.renderScale / 2 - this.scrollOffset[1] - this.cameraOffset[1]) / 30;
             let renderScroll = [Math.round(this.scrollOffset[0]), Math.round(this.scrollOffset[1])]
-    
+
             this.ctx.drawImage(this.assets["backgroundtest"], 0, 0, this.canvas.width / this.renderScale, this.canvas.height / this.renderScale);
             this.tilemap.draw(renderScroll);
-    
+
             this.player.update(this.tilemap, [(this.movement[1] - this.movement[0]) * 1.45, 0]);
             this.player.draw(this.assets["player"], this.ctx, renderScroll);
-    
+
+            this.particleManager.update();
+            this.particleManager.draw(renderScroll);
+
+            this.ctx.closePath();
+
             this.movement[0] = false;
             this.movement[1] = false;
-    
+
             if(this.keys["a"]){
                 this.movement[0] = true;
             }
@@ -101,19 +114,22 @@ class Game{
                 this.player.jump();
             } 
             //Testar lite kanske ta bort
-            if(this.keys["w"] && this.player.isGrounded){
-                this.cameraOffset[1] = 200;
-            }
-            else{
-                this.cameraOffset[1] = 0;
+            if(this.player.isGrounded && this.movement[0] + this.movement[1] === 0) //HAHAHAHA olaglig lösning, fixa senare
+            {
+                if(this.keys["w"]){
+                    this.cameraOffset[1] = this.canvas.height / this.renderScale / 2.5; //Påhittade siffror, alla älskar det. Men det funkar bra
+                }
+                else{
+                    this.cameraOffset[1] = 0;
+                }
+                if(this.keys["s"]){
+                    this.cameraOffset[1] = -this.canvas.height / this.renderScale / 2.5;
+                }
             }
 
-            if(this.keys["s"] && this.player.isGrounded){
-                this.cameraOffset[1] = -200;
-            }
-        }, 1000/this.FPS);
+            this.lastTime = currentTime - (elapsed % this.FPS);
+        }
     }
 }
-
 let game = new Game(document.getElementById("canvas"));
 game.run();
