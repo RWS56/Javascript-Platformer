@@ -4,6 +4,7 @@ class Rect{
         this.y = y + origin[1];
         this.width = width;
         this.height = height;
+        this.origin = origin;
     }
 
     collision(otherRect){
@@ -24,11 +25,11 @@ class Rect{
     }
     
     get left(){
-        return this.x;
+        return this.x - this.origin[0];
     }
 
     get top(){
-        return this.y;
+        return this.y - this.origin[1];
     }
 
     get bottom(){

@@ -1,4 +1,3 @@
 # TODO
 
-FIXA TILEMAP: Lägg till stöd för offgridtilemap
-hej
+FIXA TILEMAP: Ta i tu med rektanglarna

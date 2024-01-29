@@ -14,6 +14,7 @@ class Game{
 
         this.movement = [false, false];
         this.scrollOffset = [0, 0];
+        this.cameraOffset = [0, 0];
 
         this.keys = {};
 
@@ -28,6 +29,7 @@ class Game{
         this.tilemap.load();
 
         this.player = new Player(this, [0, 0], [16, 16]);
+        this.FPS = 60;
     }
 
     run(){
@@ -65,39 +67,51 @@ class Game{
     }
 
     //main game loop
+    //Kom ihåg att dela icke tilemap bilder med renderscale
     update(){
-        if(this.isRunning){
-            requestAnimationFrame(this.update.bind(this));
-        }
+        setTimeout(() => {
+            if(this.isRunning){
+                requestAnimationFrame(this.update.bind(this));
+            }
+    
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.beginPath();
+            this.ctx.imageSmoothingEnabled = false; //point clamp, crisp image, good 4 pixelart     
+    
+            this.scrollOffset[0] += (this.player.rect().centerX - this.canvas.width / this.renderScale / 2 - this.scrollOffset[0] - this.cameraOffset[0]) / 30; //RÖR INTE MER, FUNAKR NU
+            this.scrollOffset[1] += (this.player.rect().centerY - this.canvas.height / this.renderScale / 2 - this.scrollOffset[1] - this.cameraOffset[1]) / 30;
+            let renderScroll = [Math.round(this.scrollOffset[0]), Math.round(this.scrollOffset[1])]
+    
+            this.ctx.drawImage(this.assets["backgroundtest"], 0, 0, this.canvas.width / this.renderScale, this.canvas.height / this.renderScale);
+            this.tilemap.draw(renderScroll);
+    
+            this.player.update(this.tilemap, [(this.movement[1] - this.movement[0]) * 1.45, 0]);
+            this.player.draw(this.assets["player"], this.ctx, renderScroll);
+    
+            this.movement[0] = false;
+            this.movement[1] = false;
+    
+            if(this.keys["a"]){
+                this.movement[0] = true;
+            }
+            if(this.keys["d"]){
+                this.movement[1] = true;
+            }
+            if(this.keys[" "]){
+                this.player.jump();
+            } 
+            //Testar lite kanske ta bort
+            if(this.keys["w"] && this.player.isGrounded){
+                this.cameraOffset[1] = 200;
+            }
+            else{
+                this.cameraOffset[1] = 0;
+            }
 
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.beginPath();
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.imageSmoothingEnabled = false; //point clamp, crisp image, good 4 pixelart     
-
-        this.scrollOffset[0] += (this.player.rect().centerX - this.canvas.width / this.renderScale / 2 - this.scrollOffset[0]) / 30; //RÖR INTE MER, FUNAKR NU
-        this.scrollOffset[1] += (this.player.rect().centerY - this.canvas.height / this.renderScale / 2 - this.scrollOffset[1]) / 30;
-        let renderScroll = [Math.round(this.scrollOffset[0]), Math.round(this.scrollOffset[1])]
-
-        this.ctx.drawImage(this.assets["backgroundtest"], 0, 0, 640, 420);
-        this.tilemap.draw(renderScroll);
-
-        this.player.update(this.tilemap, [this.movement[1] - this.movement[0], 0]);
-        this.player.draw(this.assets["player"], this.ctx, renderScroll);
-
-        this.movement[0] = false;
-        this.movement[1] = false;
-
-        if(this.keys["a"]){
-            this.movement[0] = true;
-        }
-        if(this.keys["d"]){
-            this.movement[1] = true;
-        }
-        if(this.keys[" "]){
-            this.player.jump();
-        }
+            if(this.keys["s"] && this.player.isGrounded){
+                this.cameraOffset[1] = -200;
+            }
+        }, 1000/this.FPS);
     }
 }
 
