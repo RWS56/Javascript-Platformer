@@ -34,6 +34,8 @@ class Editor{
 
         //Hackfix remove later on
         this.frameCounter = 0;
+
+        this.onGrid = true;
     }
 
     run(){
@@ -95,20 +97,24 @@ class Editor{
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.imageSmoothingEnabled = false; //point clamp, crisp image, good 4 pixelart
 
-        this.scrollOffset[0] += (this.movement[1] - this.movement[0]) * 2
-        this.scrollOffset[1] += (this.movement[3] - this.movement[2]) * 2
-        let renderScroll = [Math.round(this.scrollOffset[0]), Math.round(this.scrollOffset[1])]
+        this.scrollOffset[0] += (this.movement[1] - this.movement[0]) * 2;
+        this.scrollOffset[1] += (this.movement[3] - this.movement[2]) * 2;
+        let renderScroll = [Math.round(this.scrollOffset[0]), Math.round(this.scrollOffset[1])];
 
         this.tilemap.draw(renderScroll);
 
         let selectedTileImage = this.assets[this.tileArray[this.tileType]][this.tileVariant];
-        let mouseGridPos = [Math.floor((this.mousePos[0] + this.scrollOffset[0]) / this.tilemap.tileSize), Math.floor((this.mousePos[1] + this.scrollOffset[1]) / this.tilemap.tileSize)]
-        this.ctx.globalAlpha = 0.45;
-        
-        this.ctx.drawImage(selectedTileImage, mouseGridPos[0] * this.tilemap.tileSize - this.scrollOffset[0], mouseGridPos[1] * this.tilemap.tileSize - this.scrollOffset[1], selectedTileImage.width, selectedTileImage.height);
-        
-        this.ctx.globalAlpha = 1;
+        let mouseGridPos = [Math.floor((this.mousePos[0] + this.scrollOffset[0]) / this.tilemap.tileSize), Math.floor((this.mousePos[1] + this.scrollOffset[1]) / this.tilemap.tileSize)];
 
+        this.ctx.globalAlpha = 0.45;
+        if(this.onGrid){
+            this.ctx.drawImage(selectedTileImage, mouseGridPos[0] * this.tilemap.tileSize - this.scrollOffset[0], mouseGridPos[1] * this.tilemap.tileSize - this.scrollOffset[1], selectedTileImage.width, selectedTileImage.height);
+        }
+        else{
+            this.ctx.drawImage(selectedTileImage, this.mousePos[0], this.mousePos[1], selectedTileImage.width, selectedTileImage.height);
+        }
+        this.ctx.globalAlpha = 1;
+        this.ctx.closePath();
         if(this.mouseDown){
             this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`] = {"type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": mouseGridPos};
         }
@@ -131,7 +137,7 @@ class Editor{
             this.movement[2] = true;
         }
         if(this.keys["s"]){
-            this.movement[3] = true
+            this.movement[3] = true;
         }
         if(this.keys["t"]){
             this.tilemap.autoTile();
@@ -150,6 +156,9 @@ class Editor{
         }
         if(this.keys["Shift"] && this.frameCounter === 0){
             this.tileVariant = (1 + this.tileVariant) % this.assets[this.tileArray[this.tileType]].length;
+        }
+        if(this.keys["g"] && this.frameCounter === 0){
+            this.onGrid = !this.onGrid;
         }
 
         this.frameCounter++;

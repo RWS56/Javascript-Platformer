@@ -21,7 +21,7 @@ class Game{
             "grass" : loadImages("tiles/grass", 9),
             "backgroundtest" : loadImage("backgroundtest.png"),
             "decor" : loadImages("decor", 2),
-            "playerDuck" : loadImage("duck.png"),
+            "player" : loadImage("0.png"),
         };
 
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
@@ -84,7 +84,7 @@ class Game{
         this.tilemap.draw(renderScroll);
 
         this.player.update(this.tilemap, [this.movement[1] - this.movement[0], 0]);
-        this.player.draw(this.assets["playerDuck"], this.ctx, renderScroll);
+        this.player.draw(this.assets["player"], this.ctx, renderScroll);
 
         this.movement[0] = false;
         this.movement[1] = false;

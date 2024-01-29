@@ -89,6 +89,11 @@ class Tilemap{
     }
     
     draw(offset = [0, 0]){
+        for(let location in this.offgridTiles){
+            let tile = this.offgridTiles[location];
+            this.ctx.drawImage(this.game.assets[tile["type"]][tile["variant"]], tile["pos"][0] * this.tileSize - offset[0], tile["pos"][1] * this.tileSize - offset[1], this.game.assets[tile["type"]][tile["variant"]].width, this.game.assets[tile["type"]][tile["variant"]].height);
+        }
+
         for(let x = Math.floor(offset[0] / this.tileSize) - 1; x < Math.floor((offset[0] + window.innerWidth / this.renderScale) / this.tileSize) + 1; x++){
             for(let y = Math.floor(offset[1] / this.tileSize) - 1; y < Math.floor((offset[1] + window.innerHeight / this.renderScale) / this.tileSize) + 1; y++){
                 let checkLocation = `${x};${y}`;
