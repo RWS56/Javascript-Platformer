@@ -83,7 +83,7 @@ class Player extends PhysicsEntity{
         super(game, "player", position, size);
         this.airTime = 0;
         this.isGrounded = false;
-        this.coyoteJumpThreshold = 10; // anges i frames
+        this.coyoteJumpThreshold = 15; // anges i frames
     }
 
     update(tilemap, movement = [0, 0]){
@@ -97,16 +97,33 @@ class Player extends PhysicsEntity{
     }
 
     // testkod neda ta bort när stökigt
-    draw(img, ctx, offset = [0, 0]){
+    draw(img, ctx, offset = [0, 0], mousePos){
         super.draw(img, ctx, offset);
 
-        ctx.drawImage(game.assets["rifle"], this.rect().centerX - offset[0]- 2, this.rect().centerY - 2 - offset[1]) // ascursed
+        ctx.save();
+
+        let rotationPoint = [this.rect().centerX - offset[0], this.rect().centerY - offset[1]];
+        ctx.translate(rotationPoint[0], rotationPoint[1]);
+        let rotation = Math.atan2(mousePos[1] - rotationPoint[1], mousePos[0] - rotationPoint[0]); //ändra till bättre kod
+        ctx.rotate(rotation);
+        if(Math.abs(rotation) > Math.PI/2){
+            ctx.scale(1, -1);
+        }
+        else{
+            ctx.scale(1, 1);
+        }
+        ctx.translate(-rotationPoint[0], -rotationPoint[1]);
+        ctx.drawImage(game.assets["rifle"], rotationPoint[0] - 3, rotationPoint[1] - 2); // ascursed
+        
+        ctx.restore();
     }
     //
+
     jump(){
         if(this.isGrounded && this.airTime < this.coyoteJumpThreshold){
             this.velocity[1] = -2.5;
             this.isGrounded = false;
+            this.game.particleManager.addParticle(new AnimatedParticle(game.assets["jumpAnim"].copy(), [this.rect().left - 7, this.rect().bottom - 6], [0, 0], 20)); //ändra till bättre kod
         }
     }
 }

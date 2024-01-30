@@ -16,6 +16,8 @@ class Game{
         this.scrollOffset = [0, 0];
         this.cameraOffset = [0, 0];
 
+        this.mousePos = [0, 0];
+
         this.keys = {};
 
         this.assets = { 
@@ -23,7 +25,8 @@ class Game{
             "backgroundtest" : loadImage("backgroundtest.png"),
             "decor" : loadImages("decor", 2),
             "player" : loadImage("playerTest1.png"),
-            "rifle" : loadImage("rifletest.png")
+            "rifle" : loadImage("rifletest.png"),
+            "jumpAnim": new _Animation(loadImages("particles/jump", 5))
         };
 
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
@@ -54,6 +57,11 @@ class Game{
             if(event.key === "o"){
                 this.isSaving = false;
             }
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            this.mousePos[0] = Math.floor(event.clientX / this.renderScale);
+            this.mousePos[1] = Math.floor(event.clientY / this.renderScale);
         });
         
         window.addEventListener('resize', (event) => {
@@ -94,7 +102,7 @@ class Game{
             this.tilemap.draw(renderScroll);
 
             this.player.update(this.tilemap, [(this.movement[1] - this.movement[0]) * 1.45, 0]);
-            this.player.draw(this.assets["player"], this.ctx, renderScroll);
+            this.player.draw(this.assets["player"], this.ctx, renderScroll, this.mousePos);
 
             this.particleManager.update();
             this.particleManager.draw(renderScroll);
@@ -126,7 +134,6 @@ class Game{
                     this.cameraOffset[1] = -this.canvas.height / this.renderScale / 2.5;
                 }
             }
-
             this.lastTime = currentTime - (elapsed % this.FPS);
         }
     }

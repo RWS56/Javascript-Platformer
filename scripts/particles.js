@@ -21,7 +21,7 @@ class ParticleManager{
     }
 
     addParticle(particle){
-        this.particleManager.particles.push(particle);
+        this.particles.push(particle);
     }
 }
 
@@ -43,4 +43,18 @@ class Particle{
         
         return false;
     }
+}
+
+class AnimatedParticle extends Particle{ //kanske gör så här
+    constructor(animation, position, velocity, duration){
+        super(animation.getImage(), position, velocity, duration)
+        this.animation = animation;
+    }
+
+    update(){
+        this.image = this.animation.getImage();
+        this.animation.update();
+        return super.update(); //VA FAN SKA MAN RETURNA SUPER UPDATE RIIIIOT... VÄNTA DET ÄR LOGISKT, FUCK!
+    }
+
 }
