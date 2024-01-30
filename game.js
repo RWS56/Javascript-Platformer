@@ -26,7 +26,7 @@ class Game{
             "decor" : loadImages("decor", 2),
             "player" : loadImage("playerTest1.png"),
             "rifle" : loadImage("rifletest.png"),
-            "jumpAnim": new _Animation(loadImages("particles/jump", 5))
+            "jumpAnim": new _Animation(loadImages("particles/jump", 5), 3)
         };
 
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
@@ -121,19 +121,19 @@ class Game{
             if(this.keys[" "]){
                 this.player.jump();
             } 
+
             //Testar lite kanske ta bort
+            this.cameraOffset[1] = 0;
             if(this.player.isGrounded && this.movement[0] + this.movement[1] === 0) //HAHAHAHA olaglig lösning, fixa senare
             {
                 if(this.keys["w"]){
                     this.cameraOffset[1] = this.canvas.height / this.renderScale / 2.5; //Påhittade siffror, alla älskar det. Men det funkar bra
                 }
-                else{
-                    this.cameraOffset[1] = 0;
-                }
                 if(this.keys["s"]){
                     this.cameraOffset[1] = -this.canvas.height / this.renderScale / 2.5;
                 }
             }
+            
             this.lastTime = currentTime - (elapsed % this.FPS);
         }
     }

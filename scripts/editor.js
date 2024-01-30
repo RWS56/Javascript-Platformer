@@ -115,12 +115,23 @@ class Editor{
         }
         this.ctx.globalAlpha = 1;
         this.ctx.closePath();
-        if(this.mouseDown){
-            this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`] = {"type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": mouseGridPos};
+        if(this.onGrid){
+            if(this.mouseDown){
+                this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`] = {"type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": mouseGridPos};
+            }
+            if(this.rightClick)
+            {
+                delete this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`];
+            }
         }
-        if(this.rightClick)
-        {
-            delete this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`];
+        else{
+            if(this.mouseDown){
+                this.tilemap.offgridTiles[`${this.mousePos[0]};${this.mousePos[1]}`] = {"type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": this.mousePos};
+            }
+            if(this.rightClick)
+            {
+                delete this.tilemap.offgridTiles[`${this.mousePos[0]};${this.mousePos[1]}`];
+            }
         }
 
         this.movement[0] = false;
