@@ -1,10 +1,10 @@
 //const { Tilemap, neighborOffset } = require('./scripts/tilemap'); 4 node
 
-class Editor{
-    constructor(canvas){
+class Editor {
+    constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
-        
+
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.renderScale = 3;
@@ -20,12 +20,12 @@ class Editor{
 
         this.isSaving = false;
 
-        this.assets = { 
-            "grass" : loadImages("tiles/grass", 9),
-            "decor" : loadImages("decor", 2),
+        this.assets = {
+            "grass": loadImages("tiles/grass", 9),
+            "decor": loadImages("decor", 2),
         };
 
-        this.tileArray = Object.keys(this.assets);  
+        this.tileArray = Object.keys(this.assets);
         this.tileType = 0;
         this.tileVariant = 0;
 
@@ -38,44 +38,44 @@ class Editor{
         this.onGrid = true;
     }
 
-    run(){
+    run() {
         this.addListeners();
 
         this.update();
     }
 
-    addListeners(){
+    addListeners() {
         document.addEventListener('keydown', (event) => {
             this.keys[event.key] = true;
         });
-        
+
         document.addEventListener('keyup', (event) => {
             this.keys[event.key] = false;
 
-            if(event.key === "o"){
+            if (event.key === "o") {
                 this.isSaving = false;
             }
         });
-        
+
         document.addEventListener('mousemove', (event) => {
             this.mousePos[0] = Math.floor(event.clientX / this.renderScale);
             this.mousePos[1] = Math.floor(event.clientY / this.renderScale);
         });
-        
+
         document.addEventListener('mousedown', (event) => {
-            if (event.button === 0){
-                this.mouseDown = true;  
+            if (event.button === 0) {
+                this.mouseDown = true;
             }
-            else if (event.button === 2){
-                this.rightClick = true;  
+            else if (event.button === 2) {
+                this.rightClick = true;
             }
         });
-        
+
         document.addEventListener('mouseup', (event) => {
             this.mouseDown = false;
             this.rightClick = false;
         });
-        
+
         window.addEventListener('resize', (event) => {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
@@ -88,7 +88,7 @@ class Editor{
     }
 
     //main game loop
-    update(){
+    update() {
         requestAnimationFrame(this.update.bind(this));
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -107,29 +107,27 @@ class Editor{
         let mouseGridPos = [Math.floor((this.mousePos[0] + this.scrollOffset[0]) / this.tilemap.tileSize), Math.floor((this.mousePos[1] + this.scrollOffset[1]) / this.tilemap.tileSize)];
 
         this.ctx.globalAlpha = 0.45;
-        if(this.onGrid){
+        if (this.onGrid) {
             this.ctx.drawImage(selectedTileImage, mouseGridPos[0] * this.tilemap.tileSize - this.scrollOffset[0], mouseGridPos[1] * this.tilemap.tileSize - this.scrollOffset[1], selectedTileImage.width, selectedTileImage.height);
         }
-        else{
+        else {
             this.ctx.drawImage(selectedTileImage, this.mousePos[0], this.mousePos[1], selectedTileImage.width, selectedTileImage.height);
         }
         this.ctx.globalAlpha = 1;
         this.ctx.closePath();
-        if(this.onGrid){
-            if(this.mouseDown){
-                this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`] = {"type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": mouseGridPos};
+        if (this.onGrid) {
+            if (this.mouseDown) {
+                this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`] = { "type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": mouseGridPos };
             }
-            if(this.rightClick)
-            {
+            if (this.rightClick) {
                 delete this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`];
             }
         }
-        else{
-            if(this.mouseDown){
-                this.tilemap.offgridTiles[`${this.mousePos[0]};${this.mousePos[1]}`] = {"type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": this.mousePos};
+        else {
+            if (this.mouseDown) {
+                this.tilemap.offgridTiles[`${this.mousePos[0]};${this.mousePos[1]}`] = { "type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": this.mousePos };
             }
-            if(this.rightClick)
-            {
+            if (this.rightClick) {
                 delete this.tilemap.offgridTiles[`${this.mousePos[0]};${this.mousePos[1]}`];
             }
         }
@@ -138,42 +136,42 @@ class Editor{
         this.movement[1] = false;
         this.movement[2] = false;
         this.movement[3] = false;
-        if(this.keys["a"]){
+        if (this.keys["a"]) {
             this.movement[0] = true;
         }
-        if(this.keys["d"]){
+        if (this.keys["d"]) {
             this.movement[1] = true
         }
-        if(this.keys["w"]){
+        if (this.keys["w"]) {
             this.movement[2] = true;
         }
-        if(this.keys["s"]){
+        if (this.keys["s"]) {
             this.movement[3] = true;
         }
-        if(this.keys["t"]){
+        if (this.keys["t"]) {
             this.tilemap.autoTile();
         }
-        if(this.keys["o"] && !this.isSaving){
+        if (this.keys["o"] && !this.isSaving) {
             this.isSaving = true;
-            this.tilemap.save();    
+            this.tilemap.save();
         }
-        if(this.keys["+"] && this.frameCounter === 0){
+        if (this.keys["+"] && this.frameCounter === 0) {
             this.tileVariant = 0;
             this.tileType = (1 + this.tileType) % this.tileArray.length;
         }
-        if(this.keys["-"] && this.frameCounter === 0){
+        if (this.keys["-"] && this.frameCounter === 0) {
             this.tileVariant = 0;
             this.tileType = (1 - this.tileType) % this.tileArray.length;
         }
-        if(this.keys["Shift"] && this.frameCounter === 0){
+        if (this.keys["Shift"] && this.frameCounter === 0) {
             this.tileVariant = (1 + this.tileVariant) % this.assets[this.tileArray[this.tileType]].length;
         }
-        if(this.keys["g"] && this.frameCounter === 0){
+        if (this.keys["g"] && this.frameCounter === 0) {
             this.onGrid = !this.onGrid;
         }
 
         this.frameCounter++;
-        if(this.frameCounter % 20 === 0){
+        if (this.frameCounter % 20 === 0) {
             this.frameCounter = 0;
         }
     }

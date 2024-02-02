@@ -4,8 +4,8 @@
 /*let input = document.createElement('input');
         input.type = 'file';
 
-        input.onchange = e => { 
-            let file = e.target.files[0]; 
+        input.onchange = e => {
+            let file = e.target.files[0];
 
             let reader = new FileReader();
             reader.readAsText(file,'UTF-8');
@@ -23,18 +23,18 @@
         }
 
         input.click();*/
-        /*this.tilemap = mapData.tilemap;
-        this.tileSize = mapData.tileSize;
-        this.offgridTiles = mapData.offgridTiles;*/
+/*this.tilemap = mapData.tilemap;
+this.tileSize = mapData.tileSize;
+this.offgridTiles = mapData.offgridTiles;*/
 
-        //dåligt sätt
-        /*let data = JSON.stringify({"tilemap": this.tilemap, "tileSize": this.tileSize, "offgridTiles": this.offgridTiles});
-        let element = document.createElement("a");
-        element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
-        element.setAttribute("download", "map.json");
+//dåligt sätt
+/*let data = JSON.stringify({"tilemap": this.tilemap, "tileSize": this.tileSize, "offgridTiles": this.offgridTiles});
+let element = document.createElement("a");
+element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
+element.setAttribute("download", "map.json");
 
-        element.style.display = "none";
-        document.body.appendChild(element);
-        element.click();
+element.style.display = "none";
+document.body.appendChild(element);
+element.click();
 
-        document.body.removeChild(element);*/
+document.body.removeChild(element);*/

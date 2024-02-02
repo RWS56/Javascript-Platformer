@@ -1,15 +1,15 @@
 //const { Tilemap, neighborOffset } = require('./scripts/tilemap'); 4 node
 
-class Game{
-    constructor(canvas){
+class Game {
+    constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
-        
+
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
         this.renderScale = 3;
         this.ctx.scale(this.renderScale, this.renderScale)
-        
+
         this.isRunning = false;
 
         this.movement = [false, false];
@@ -20,12 +20,12 @@ class Game{
 
         this.keys = {};
 
-        this.assets = { 
-            "grass" : loadImages("tiles/grass", 9),
-            "backgroundtest" : loadImage("backgroundtest.png"),
-            "decor" : loadImages("decor", 2),
-            "player" : loadImage("playerTest1.png"),
-            "rifle" : loadImage("rifletest.png"),
+        this.assets = {
+            "grass": loadImages("tiles/grass", 9),
+            "backgroundtest": loadImage("backgroundtest.png"),
+            "decor": loadImages("decor", 2),
+            "player": loadImage("playerTest1.png"),
+            "rifle": loadImage("rifletest.png"),
             "jumpAnim": new _Animation(loadImages("particles/jump", 5), 3)
         };
 
@@ -36,25 +36,25 @@ class Game{
 
         this.particleManager = new ParticleManager(this.ctx);
 
-        this.FPS = 1000/60; //antalet ms per frame
+        this.FPS = 1000 / 60; //antalet ms per frame
         this.lastTime = Date.now();
     }
 
-    run(){
+    run() {
         this.isRunning = true;
         this.addListeners();
         this.update();
     }
 
-    addListeners(){
+    addListeners() {
         document.addEventListener('keydown', (event) => {
             this.keys[event.key] = true;
         });
-        
+
         document.addEventListener('keyup', (event) => {
             this.keys[event.key] = false;
 
-            if(event.key === "o"){
+            if (event.key === "o") {
                 this.isSaving = false;
             }
         });
@@ -63,7 +63,7 @@ class Game{
             this.mousePos[0] = Math.floor(event.clientX / this.renderScale);
             this.mousePos[1] = Math.floor(event.clientY / this.renderScale);
         });
-        
+
         window.addEventListener('resize', (event) => {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
@@ -75,21 +75,21 @@ class Game{
         }, false);
     }
 
-    exit(){
+    exit() {
         this.isRunning = false;
     }
 
     //main game loop
     //Kom ihåg att dela icke tilemap bilder med renderscale
-    update(){
-        if(this.isRunning){
+    update() {
+        if (this.isRunning) {
             requestAnimationFrame(this.update.bind(this));
         }
 
         let currentTime = Date.now();
         let elapsed = currentTime - this.lastTime;
 
-        if(elapsed > this.FPS){
+        if (elapsed > this.FPS) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.beginPath();
             this.ctx.imageSmoothingEnabled = false; //point clamp, crisp image, good 4 pixelart     
@@ -112,28 +112,28 @@ class Game{
             this.movement[0] = false;
             this.movement[1] = false;
 
-            if(this.keys["a"]){
+            if (this.keys["a"]) {
                 this.movement[0] = true;
             }
-            if(this.keys["d"]){
+            if (this.keys["d"]) {
                 this.movement[1] = true;
             }
-            if(this.keys[" "]){
+            if (this.keys[" "]) {
                 this.player.jump();
-            } 
+            }
 
             //Testar lite kanske ta bort
             this.cameraOffset[1] = 0;
-            if(this.player.isGrounded && this.movement[0] + this.movement[1] === 0) //HAHAHAHA olaglig lösning, fixa senare
+            if (this.player.isGrounded && this.movement[0] + this.movement[1] === 0) //HAHAHAHA olaglig lösning, fixa senare
             {
-                if(this.keys["w"]){
+                if (this.keys["w"]) {
                     this.cameraOffset[1] = this.canvas.height / this.renderScale / 2.5; //Påhittade siffror, alla älskar det. Men det funkar bra
                 }
-                if(this.keys["s"]){
+                if (this.keys["s"]) {
                     this.cameraOffset[1] = -this.canvas.height / this.renderScale / 2.5;
                 }
             }
-            
+
             this.lastTime = currentTime - (elapsed % this.FPS);
         }
     }
