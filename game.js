@@ -48,15 +48,11 @@ class Game {
 
     addListeners() {
         document.addEventListener('keydown', (event) => {
-            this.keys[event.key] = true;
+            this.keys[event.code] = true;
         });
 
         document.addEventListener('keyup', (event) => {
-            this.keys[event.key] = false;
-
-            if (event.key === "o") {
-                this.isSaving = false;
-            }
+            this.keys[event.code] = false;
         });
 
         document.addEventListener('mousemove', (event) => {
@@ -112,13 +108,13 @@ class Game {
             this.movement[0] = false;
             this.movement[1] = false;
 
-            if (this.keys["a"]) {
+            if (this.keys["KeyA"]) {
                 this.movement[0] = true;
             }
-            if (this.keys["d"]) {
+            if (this.keys["KeyD"]) {
                 this.movement[1] = true;
             }
-            if (this.keys[" "]) {
+            if (this.keys["Space"]) {
                 this.player.jump();
             }
 
@@ -126,10 +122,10 @@ class Game {
             this.cameraOffset[1] = 0;
             if (this.player.isGrounded && this.movement[0] + this.movement[1] === 0) //HAHAHAHA olaglig lösning, fixa senare
             {
-                if (this.keys["w"]) {
+                if (this.keys["KeyW"]) {
                     this.cameraOffset[1] = this.canvas.height / this.renderScale / 2.5; //Påhittade siffror, alla älskar det. Men det funkar bra
                 }
-                if (this.keys["s"]) {
+                if (this.keys["KeyS"]) {
                     this.cameraOffset[1] = -this.canvas.height / this.renderScale / 2.5;
                 }
             }

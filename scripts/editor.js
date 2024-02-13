@@ -46,13 +46,13 @@ class Editor {
 
     addListeners() {
         document.addEventListener('keydown', (event) => {
-            this.keys[event.key] = true;
+            this.keys[event.code] = true;
         });
 
         document.addEventListener('keyup', (event) => {
-            this.keys[event.key] = false;
+            this.keys[event.code] = false;
 
-            if (event.key === "o") {
+            if (event.code === "KeyO") {
                 this.isSaving = false;
             }
         });
@@ -136,37 +136,37 @@ class Editor {
         this.movement[1] = false;
         this.movement[2] = false;
         this.movement[3] = false;
-        if (this.keys["a"]) {
+        if (this.keys["KeyA"]) {
             this.movement[0] = true;
         }
-        if (this.keys["d"]) {
+        if (this.keys["KeyD"]) {
             this.movement[1] = true
         }
-        if (this.keys["w"]) {
+        if (this.keys["KeyW"]) {
             this.movement[2] = true;
         }
-        if (this.keys["s"]) {
+        if (this.keys["KeyS"]) {
             this.movement[3] = true;
         }
-        if (this.keys["t"]) {
+        if (this.keys["KeyT"]) {
             this.tilemap.autoTile();
         }
-        if (this.keys["o"] && !this.isSaving) {
+        if (this.keys["KeyO"] && !this.isSaving) {
             this.isSaving = true;
             this.tilemap.save();
         }
-        if (this.keys["+"] && this.frameCounter === 0) {
+        if (this.keys["Minus"] && this.frameCounter === 0) { //Cringe amerikansk keyboard detta är +
             this.tileVariant = 0;
             this.tileType = (1 + this.tileType) % this.tileArray.length;
         }
-        if (this.keys["-"] && this.frameCounter === 0) {
+        if (this.keys["Slash"] && this.frameCounter === 0) { //minus
             this.tileVariant = 0;
             this.tileType = (1 - this.tileType) % this.tileArray.length;
         }
-        if (this.keys["Shift"] && this.frameCounter === 0) {
+        if (this.keys["ShiftLeft"] && this.frameCounter === 0) {
             this.tileVariant = (1 + this.tileVariant) % this.assets[this.tileArray[this.tileType]].length;
         }
-        if (this.keys["g"] && this.frameCounter === 0) {
+        if (this.keys["KeyG"] && this.frameCounter === 0) {
             this.onGrid = !this.onGrid;
         }
 
