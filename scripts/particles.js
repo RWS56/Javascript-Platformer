@@ -4,14 +4,15 @@ class ParticleManager {
         this.particles = [];
     }
 
-    update() {
+    update() { //eventuellt ändra tillbaka till gammal kod om problem uppstår
+        let particlesNextFrame = [];
         for (let i in this.particles) {
             if (this.particles[i].update()) {
+                particlesNextFrame.push(this.particles[i]);
                 continue;
             }
-
-            this.particles.splice(i, 1);
         }
+        this.particles = particlesNextFrame;
     }
 
     draw(offset) {

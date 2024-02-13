@@ -88,9 +88,9 @@ class Tilemap {
     }
 
     draw(offset = [0, 0]) {
-        for (let location in this.offgridTiles) {
+        for (let location in this.offgridTiles) { //Eventuellt gör detta bättre så att bara det som syns ritas, just nu tror jag dock det ej behövs
             let tile = this.offgridTiles[location];
-            this.ctx.drawImage(this.game.assets[tile["type"]][tile["variant"]], tile["pos"][0] * this.tileSize - offset[0], tile["pos"][1] * this.tileSize - offset[1], this.game.assets[tile["type"]][tile["variant"]].width, this.game.assets[tile["type"]][tile["variant"]].height);
+            this.ctx.drawImage(this.game.assets[tile["type"]][tile["variant"]], tile["pos"][0] - offset[0], tile["pos"][1] - offset[1], this.game.assets[tile["type"]][tile["variant"]].width, this.game.assets[tile["type"]][tile["variant"]].height);
         }
 
         for (let x = Math.floor(offset[0] / this.tileSize) - 1; x < Math.floor((offset[0] + window.innerWidth / this.renderScale) / this.tileSize) + 1; x++) {

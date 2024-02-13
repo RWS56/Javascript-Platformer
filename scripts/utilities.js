@@ -32,7 +32,7 @@ class _Animation {
             this.frame = (this.frame + 1) % (this.imageDuration * this.images.length);
         }
         else {
-            this.frame = min(this.frame + 1, this.imageDuration * this.images.length - 1)
+            this.frame = Math.min(this.frame + 1, this.imageDuration * this.images.length - 1)
             if (this.frame >= this.imageDuration * this.images.length) {
                 this.done = true;
             }

@@ -29,13 +29,17 @@ class Game {
             "jumpAnim": new _Animation(loadImages("particles/jump", 5), 3)
         };
 
+        this.sounds = {
+            "jump" : new Audio("data/sounds/jump.wav"),
+        };
+        this.masterVolume = 0.3; //mellan 0-1
+
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
         this.tilemap.load();
 
         this.player = new Player(this, [0, 0], [6, 16]);
 
         this.particleManager = new ParticleManager(this.ctx);
-
         this.FPS = 1000 / 60; //antalet ms per frame
         this.lastTime = Date.now();
     }

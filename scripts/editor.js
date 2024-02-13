@@ -90,8 +90,8 @@ class Editor {
     //main game loop
     update() {
         requestAnimationFrame(this.update.bind(this));
-
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
         this.ctx.beginPath();
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -115,6 +115,7 @@ class Editor {
         }
         this.ctx.globalAlpha = 1;
         this.ctx.closePath();
+
         if (this.onGrid) {
             if (this.mouseDown) {
                 this.tilemap.tilemap[`${mouseGridPos[0]};${mouseGridPos[1]}`] = { "type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": mouseGridPos };
@@ -125,10 +126,10 @@ class Editor {
         }
         else {
             if (this.mouseDown) {
-                this.tilemap.offgridTiles[`${this.mousePos[0]};${this.mousePos[1]}`] = { "type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": this.mousePos };
+                this.tilemap.offgridTiles[`${this.mousePos[0] + this.scrollOffset[0]};${this.mousePos[1] + this.scrollOffset[1]}`] = { "type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": [this.mousePos[0] + this.scrollOffset[0], this.mousePos[1] + this.scrollOffset[1]] };
             }
             if (this.rightClick) {
-                delete this.tilemap.offgridTiles[`${this.mousePos[0]};${this.mousePos[1]}`];
+                delete this.tilemap.offgridTiles[`${this.mousePos[0] + this.scrollOffset[0]};${this.mousePos[1] + this.scrollOffset[1]}`];
             }
         }
 

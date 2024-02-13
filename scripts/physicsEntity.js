@@ -98,8 +98,8 @@ class Player extends PhysicsEntity {
 
     // testkod neda ta bort när stökigt
     draw(img, ctx, offset = [0, 0], mousePos) {
-        super.draw(img, ctx, offset);
-
+        super.draw(img, ctx, offset); //Eventuellt kolla dit vapnet är
+        
         ctx.save();
 
         let rotationPoint = [this.rect().centerX - offset[0], this.rect().centerY - offset[1]];
@@ -123,6 +123,8 @@ class Player extends PhysicsEntity {
         if (this.isGrounded && this.airTime < this.coyoteJumpThreshold) {
             this.velocity[1] = -2.5;
             this.isGrounded = false;
+            this.game.sounds["jump"].volume = this.game.masterVolume;
+            this.game.sounds["jump"].play();
             this.game.particleManager.addParticle(new AnimatedParticle(game.assets["jumpAnim"].copy(), [this.rect().left - 7, this.rect().bottom - 6], [0, 0], 15)); //ändra till bättre kod
         }
     }

@@ -17,7 +17,7 @@ class Weapon {
 }
 
 class Gun extends Weapon {
-    constructor(image, type, damage) {
-        super(image, type, damage)
+    constructor(image, type, damage, useTime) {
+        super(image, type, damage, useTime);
     }
 }
