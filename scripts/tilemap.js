@@ -77,7 +77,7 @@ class Tilemap {
         }
     }
 
-    getPhysicsRectAround(position) { //använd for(let tile in x) etc ungefär som pythons for tile in tiles etc
+    getPhysicsRectAround(position) {
         let rects = [];
         for (let tile of this.tilesAround(position)) {
             if (physicsTiles.includes(tile["type"])) {

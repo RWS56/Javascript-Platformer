@@ -1,5 +1,0 @@
-class Projectile{
-    constructor(ctx){
-
-    }
-}
