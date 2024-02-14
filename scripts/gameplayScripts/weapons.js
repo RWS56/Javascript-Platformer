@@ -1,6 +1,9 @@
 class Weapon {
-    constructor(image, type, damage, useTime) {
+    constructor(image, width, height, anchor, type, damage, useTime) {
         this.image = image;
+        this.width = width;
+        this.height = height;
+        this.anchorPosition = anchor; // array ex [5, 5] där [0, 0] är player.rect.top och left
         this.type = type;
         this.damage = damage;
         this.useTime = useTime; // max väntetiden. Mäts i frames
