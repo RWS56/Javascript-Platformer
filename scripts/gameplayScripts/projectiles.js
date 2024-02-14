@@ -1,13 +1,13 @@
-class ProjectileManager{
-    constructor(ctx){
+class ProjectileManager {
+    constructor(ctx) {
         this.ctx = ctx;
         this.projectiles = [];
     }
 
-    update(){
+    update() {
         let projectilesNextFrame = [];
-        for(let i in this.projectiles){
-            if(this.projectiles[i].update()){
+        for (let i in this.projectiles) {
+            if (this.projectiles[i].update()) {
                 projectilesNextFrame.push(this.projectiles[i]);
                 continue;
             }
@@ -27,8 +27,8 @@ class ProjectileManager{
     }
 }
 
-class Projectile{
-    constructor(ctx, displayImage, pos, speed, direction, damage, lifetime = -1){
+class Projectile {
+    constructor(ctx, displayImage, pos, speed, direction, damage, lifetime = -1) {
         this.ctx = ctx;
         this.image = displayImage;
         this.position = pos;
@@ -38,7 +38,7 @@ class Projectile{
         this.lifetime = lifetime;
     }
 
-    update(){
+    update() {
         this.position[0] += Math.cos(this.direction) * this.speed; //eventuellt gör dessa uträkningar i constructor ifall speed || direction ska vara konstant
         this.position[1] += Math.sin(this.direction) * this.speed;
     }

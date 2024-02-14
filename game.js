@@ -119,7 +119,7 @@ class Game {
                 this.player.jump();
             }
             if (this.keys["KeyP"]) {
-                this.camera.screenShake(10, 7, 2);
+                this.camera.screenShake(5, 7, 4); //kanske bra för explosion
             }
 
             //Testar lite kanske ta bort
