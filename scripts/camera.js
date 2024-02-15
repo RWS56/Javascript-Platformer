@@ -28,6 +28,7 @@ class Camera {
             this.offset[1] = amplitude * Math.sin(angle);
 
             duration--;
+            console.log(duration)
         }, this.game.FPS);
     }
 }

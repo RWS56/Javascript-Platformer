@@ -126,10 +126,10 @@ class Editor {
         }
         else {
             if (this.mouseDown) {
-                this.tilemap.offgridTiles[`${this.mousePos[0] + this.scrollOffset[0]};${this.mousePos[1] + this.scrollOffset[1]}`] = { "type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": [this.mousePos[0] + this.scrollOffset[0], this.mousePos[1] + this.scrollOffset[1]] };
+                this.tilemap.offgridTiles[`${mouseGridPos[0]};${mouseGridPos[1]}`] = { "type": this.tileArray[this.tileType], "variant": this.tileVariant, "pos": [this.mousePos[0] + this.scrollOffset[0], this.mousePos[1] + this.scrollOffset[1]] };
             }
             if (this.rightClick) {
-                delete this.tilemap.offgridTiles[`${this.mousePos[0] + this.scrollOffset[0]};${this.mousePos[1] + this.scrollOffset[1]}`];
+                delete this.tilemap.offgridTiles[`${mouseGridPos[0]};${mouseGridPos[1]}`]; // cursed sätt att använda gridpos men det är bättre än det förra, by tillbaka till mousepos + offset och gör en rektangel runt senare
             }
         }
 
