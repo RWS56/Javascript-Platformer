@@ -14,22 +14,24 @@ class ProjectileManager {
 
             //eventuell hantering av döda fastän de borde hantera sig själva
         }
+
+        this.projectiles = projectilesNextFrame;
     }
 
     draw(offset) {
         for (let projectile of this.projectiles) {
+            //rotera projektilen rätt
             this.ctx.drawImage(projectile.image, projectile.position[0] - offset[0], projectile.position[1] - offset[1])
         }
     }
 
-    addParticle(projectile) {
+    addProjectile(projectile) {
         this.projectiles.push(projectile);
     }
 }
 
 class Projectile {
-    constructor(ctx, displayImage, pos, width, height, speed, direction, damage, lifetime = -1) {
-        this.ctx = ctx;
+    constructor(displayImage, pos, width, height, speed, direction, damage, lifetime = -1) {
         this.image = displayImage;
         this.position = pos;
         this.width = width;
@@ -42,6 +44,7 @@ class Projectile {
 
     update() {
         if (this.lifetime !== 0) {
+            this.lifetime--;
             this.position[0] += Math.cos(this.direction) * this.speed; //eventuellt gör dessa uträkningar i constructor ifall speed || direction ska vara konstant
             this.position[1] += Math.sin(this.direction) * this.speed;
 

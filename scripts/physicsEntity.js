@@ -84,6 +84,7 @@ class Player extends PhysicsEntity {
         this.airTime = 0;
         this.isGrounded = false;
         this.coyoteJumpThreshold = 15; // anges i frames
+        this.currentWeapon = new Gun(game.assets.rifle, 16, 4, [3, 8], [-3, -2], "gun", 1, 30, [5, 5], game.projectileManager, null);
     }
 
     update(tilemap, movement = [0, 0]) {
@@ -100,9 +101,9 @@ class Player extends PhysicsEntity {
     draw(img, ctx, offset = [0, 0], mousePos) {
         super.draw(img, ctx, offset); //Eventuellt kolla dit vapnet är
         
+        //draw currentWeapon
         ctx.save();
-
-        let rotationPoint = [this.rect().centerX - offset[0], this.rect().centerY - offset[1]];
+        let rotationPoint = [this.rect().left - offset[0] + this.currentWeapon.anchorPosition[0], this.rect().top - offset[1] + this.currentWeapon.anchorPosition[1]];
         ctx.translate(rotationPoint[0], rotationPoint[1]);
         let rotation = Math.atan2(mousePos[1] - rotationPoint[1], mousePos[0] - rotationPoint[0]); //ändra till bättre kod
         ctx.rotate(rotation);
@@ -113,8 +114,7 @@ class Player extends PhysicsEntity {
             ctx.scale(1, 1);
         }
         ctx.translate(-rotationPoint[0], -rotationPoint[1]);
-        ctx.drawImage(game.assets["rifle"], rotationPoint[0] - 3, rotationPoint[1] - 2); // ascursed
-
+        ctx.drawImage(this.currentWeapon.image, rotationPoint[0] + this.currentWeapon.anchorOffset[0], rotationPoint[1] + this.currentWeapon.anchorOffset[1]); // ascursed
         ctx.restore();
     }
     //

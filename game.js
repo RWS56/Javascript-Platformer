@@ -15,6 +15,8 @@ class Game {
         this.movement = [false, false];
 
         this.mousePos = [0, 0];
+        this.mouseDown = false;
+        this.rightClick = false;
 
         this.keys = {};
 
@@ -24,7 +26,8 @@ class Game {
             "decor": loadImages("decor", 2),
             "player": loadImage("playerTest1.png"),
             "rifle": loadImage("rifletest.png"),
-            "jumpAnim": new _Animation(loadImages("particles/jump", 5), 3)
+            "jumpAnim": new _Animation(loadImages("particles/jump", 5), 3),
+            "bullet": loadImage("bullet.png"),
         };
 
         this.sounds = {
@@ -32,13 +35,20 @@ class Game {
         };
         this.masterVolume = 0.3; //mellan 0-1
 
+        this.prefabs = {
+            //"bullet": new Projectile(this.assets.bullet) Gör på detta vis senare
+        };
+
         this.tilemap = new Tilemap(this, this.ctx, this.canvas, 16, this.renderScale);
         this.tilemap.load();
 
+        this.particleManager = new ParticleManager(this.ctx);
+        this.projectileManager = new ProjectileManager(this.ctx);
+
         this.player = new Player(this, [0, 0], [6, 16]);
+        this.weaponCD = 0; //eventuellt flytta till vapnet eller player klassen
         this.camera = new Camera(this, this.player);
 
-        this.particleManager = new ParticleManager(this.ctx);
         this.FPS = 1000 / 60; //antalet ms per frame
         this.lastTime = Date.now();
     }
@@ -61,6 +71,20 @@ class Game {
         document.addEventListener('mousemove', (event) => {
             this.mousePos[0] = Math.floor(event.clientX / this.renderScale);
             this.mousePos[1] = Math.floor(event.clientY / this.renderScale);
+        });
+
+        document.addEventListener('mousedown', (event) => {
+            if (event.button === 0) {
+                this.mouseDown = true;
+            }
+            else if (event.button === 2) {
+                this.rightClick = true;
+            }
+        });
+
+        document.addEventListener('mouseup', (event) => {
+            this.mouseDown = false;
+            this.rightClick = false;
         });
 
         window.addEventListener('resize', (event) => {
@@ -104,6 +128,9 @@ class Game {
             this.particleManager.update();
             this.particleManager.draw(renderScroll);
 
+            this.projectileManager.update();
+            this.projectileManager.draw(renderScroll);
+
             this.ctx.closePath();
 
             this.movement[0] = false;
@@ -121,6 +148,13 @@ class Game {
             if (this.keys["KeyP"]) {
                 this.camera.screenShake(5, 7, 4); //kanske bra för explosion
             }
+
+            if(this.mouseDown && this.weaponCD < 0){
+                this.weaponCD = this.player.currentWeapon.useTime;
+                this.player.currentWeapon.projectile = new Projectile(this.assets.bullet, [10, 20], 10, 10, 10, 32, 3, 100);
+                this.player.currentWeapon.onUse();
+            }
+            this.weaponCD--;
 
             //Testar lite kanske ta bort
             this.camera.offset[1] = 0;
