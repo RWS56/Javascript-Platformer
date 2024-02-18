@@ -9,6 +9,7 @@ class Weapon {
         this.damage = damage;
         this.useTime = useTime; // max väntetiden. Mäts i frames
         this.cooldown = 0; // används för att hålla redo på tiden tills man kan använda igen
+        this.rotation = 0;
     }
 
     //ja vet ick om ja ska använda en sådan eller bara ta dess variabler och göra allt när jag ritar player
@@ -34,6 +35,8 @@ class Gun extends Weapon {
 
     onUse() {
         super.onUse()
-        this.projectileManager.addProjectile(this.projectile);
+        let projectile = this.projectile.copy();
+        projectile.direction = this.rotation;
+        this.projectileManager.addProjectile(projectile);
     }
 }

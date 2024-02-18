@@ -21,7 +21,12 @@ class ProjectileManager {
     draw(offset) {
         for (let projectile of this.projectiles) {
             //rotera projektilen rätt
-            this.ctx.drawImage(projectile.image, projectile.position[0] - offset[0], projectile.position[1] - offset[1])
+            this.ctx.save();
+            this.ctx.translate(projectile.rect().centerX, projectile.rect().centerY);
+            this.ctx.rotate(projectile.rotation);
+            this.ctx.translate(-projectile.rect().centerX, -projectile.rect().centerY);
+            this.ctx.drawImage(projectile.image, projectile.position[0] - offset[0], projectile.position[1] - offset[1]);
+            this.ctx.restore();
         }
     }
 
@@ -45,7 +50,8 @@ class Projectile {
     update() {
         if (this.lifetime !== 0) {
             this.lifetime--;
-            this.position[0] += Math.cos(this.direction) * this.speed; //eventuellt gör dessa uträkningar i constructor ifall speed || direction ska vara konstant
+            //eventuellt gör dessa uträkningar i constructor ifall speed || direction ska vara konstant
+            this.position[0] += Math.cos(this.direction) * this.speed; 
             this.position[1] += Math.sin(this.direction) * this.speed;
 
             return true;
@@ -56,5 +62,10 @@ class Projectile {
 
     rect() {
         return new Rect(this.position[0], this.position[1], this.width, this.height);
+    }
+
+    copy(){
+        //... gör att en referens inte skapas utan att en ny array(objekt) skapas
+        return new Projectile(this.image, [...this.position], this.width, this.height, this.speed, this.direction, this.damage, this.lifetime); 
     }
 }

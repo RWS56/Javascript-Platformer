@@ -151,7 +151,6 @@ class Game {
 
             if(this.mouseDown && this.weaponCD < 0){
                 this.weaponCD = this.player.currentWeapon.useTime;
-                this.player.currentWeapon.projectile = new Projectile(this.assets.bullet, [10, 20], 10, 10, 10, 32, 3, 100);
                 this.player.currentWeapon.onUse();
             }
             this.weaponCD--;
