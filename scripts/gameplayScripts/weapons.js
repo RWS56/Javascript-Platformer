@@ -37,6 +37,7 @@ class Gun extends Weapon {
         super.onUse()
         let projectile = this.projectile.copy();
         projectile.direction = this.rotation;
+        projectile.position = [...this.shootPoint];
         this.projectileManager.addProjectile(projectile);
     }
 }
