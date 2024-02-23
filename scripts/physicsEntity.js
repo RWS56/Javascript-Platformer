@@ -84,7 +84,7 @@ class Player extends PhysicsEntity {
         this.airTime = 0;
         this.isGrounded = false;
         this.coyoteJumpThreshold = 15; // anges i frames
-        this.currentWeapon = new Gun(game.assets.rifle, 16, 4, [3, 8], [-3, -2], "gun", 1, 30, [-100, 5], game.projectileManager, new Projectile(game.assets.bullet, [10, 20], 5, 10, 2, 32, 3, 100));
+        this.currentWeapon = new Gun(game.assets.rifle, 16, 4, [3, 8], [-3, -2], "gun", 1, 30, [10, 5], game.projectileManager, new Projectile(game.assets.bullet, [10, 20], 5, 10, 2, 32, 3, 100));
     }
 
     update(tilemap, movement = [0, 0]) {

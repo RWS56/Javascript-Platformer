@@ -33,11 +33,11 @@ class Gun extends Weapon {
         this.projectile = projectile;
     }
 
-    onUse() {
+    onUse() { //Vapnets shootpoint måste justeras enligt vapnets rotationpoint så att skottet alltid kommer från mynningen.
         super.onUse()
         let projectile = this.projectile.copy();
         projectile.direction = this.rotation;
-        projectile.position = [...this.shootPoint];
+        projectile.position = [game.player.position[0] + this.shootPoint[0], game.player.position[1] + this.shootPoint[1]];
         this.projectileManager.addProjectile(projectile);
     }
 }
